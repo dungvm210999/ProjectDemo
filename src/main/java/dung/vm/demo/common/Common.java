@@ -3,8 +3,6 @@ package dung.vm.demo.common;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.springframework.security.core.context.SecurityContextHolder;
-
 public class Common {
 	public static Date stringToDate(String dateString) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(Constant.FORMAT_DATE);
@@ -17,9 +15,9 @@ public class Common {
         return dateReturn;
     }
 	
-	public static String getUsernameLogin() {
-        return SecurityContextHolder.getContext().getAuthentication().getName();
-    }
+//	public static String getUsernameLogin() {
+//        return SecurityContextHolder.getContext().getAuthentication().getName();
+//    }
 
 	public static Date getSystemDate() {
 		return new Date();

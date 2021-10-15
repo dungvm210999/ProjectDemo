@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,17 +22,23 @@ import dung.vm.demo.model.Singer;
 import dung.vm.demo.repository.SingerRepository;
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/singers")
+@CrossOrigin("*")
 public class SingerController  {
 
 	private SingerRepository singerRepository;
  
 //	Get all singers
-	@GetMapping("/singers")
-	@CrossOrigin
-	public List<Singer> getAllSingers() {
-		System.out.print("ádasdasdasd");
-		return singerRepository.findAll();
+//	@GetMapping("/singers")
+//	@CrossOrigin
+//	public List<Singer> getAllSingers() {
+//		System.out.print("ádasdasdasd");
+//		return singerRepository.findAll();
+//	}
+	
+	@GetMapping
+	public ResponseEntity<?> getAll(){
+		return new ResponseEntity<String>("OK" , HttpStatus.OK);
 	}
 
 //	Create singer rest api

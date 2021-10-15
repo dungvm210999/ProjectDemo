@@ -31,9 +31,9 @@ public class AccountService {
         account.setGender(accountForm.getGender());
         Role role = roleRepository.getOne(accountForm.getRoleId());
         account.setRole(role);
-        account.setCreateBy(Common.getUsernameLogin());
+  //      account.setCreateBy(Common.getUsernameLogin());
         account.setCreateAt(Common.getSystemDate());
-        account.setUpdateBy(Common.getUsernameLogin());
+  //      account.setUpdateBy(Common.getUsernameLogin());
         account.setUpdateAt(Common.getSystemDate());
         accountRepository.save(account);
 	}
