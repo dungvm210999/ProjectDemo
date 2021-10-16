@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import dung.vm.demo.model.Account;
+import dung.vm.demo.entity.Account;
 import dung.vm.demo.repository.AccountRepository;
+import dung.vm.demo.service.AccountService;
 //import dung.vm.demo.service.AccountService;
 import dung.vm.demo.service.RoleService;
 
@@ -23,7 +24,7 @@ public class AccountController {
 //	AccountService accountService;
 	
 	@Autowired
-	AccountRepository accountRepository;
+	private AccountService accountService;
 	
 	@Autowired
 	RoleService roleService;

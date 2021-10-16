@@ -1,5 +1,6 @@
-package dung.vm.demo.model;
+package dung.vm.demo.entity;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -35,6 +36,33 @@ public class Singer {
 
 	@Column(name = "email")
 	private String email;
+
+	@Column(name = "description", columnDefinition = "TEXT")
+	private String description;
+
+	@Column(name = "year_of_operation")
+	private int yearOfOperation;
+
+	@Column(name = "full_name")
+	private String fullName;
+
+	@Column(name = "birthday")
+	private String birthday;
+
+	@Column(name = "is_delete", columnDefinition = "Boolean default false")
+	private boolean isDelete;
+
+	@Column(name = "create_by")
+	private String createBy;
+
+	@Column(name = "create_at")
+	private String createAt;
+
+	@Column(name = "update_by")
+	private String updateBy;
+
+	@Column(name = "update_at")
+	private Date updateAt;
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "singer", cascade = CascadeType.ALL)
@@ -123,5 +151,77 @@ public class Singer {
 	public void setImage(String image) {
 		this.image = image;
 	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public int getYearOfOperation() {
+		return yearOfOperation;
+	}
+
+	public void setYearOfOperation(int yearOfOperation) {
+		this.yearOfOperation = yearOfOperation;
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+	public String getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
+	}
+
+	public boolean isDelete() {
+		return isDelete;
+	}
+
+	public void setDelete(boolean isDelete) {
+		this.isDelete = isDelete;
+	}
+
+	public String getCreateBy() {
+		return createBy;
+	}
+
+	public void setCreateBy(String createBy) {
+		this.createBy = createBy;
+	}
+
+	public String getUpdateBy() {
+		return updateBy;
+	}
+
+	public void setUpdateBy(String updateBy) {
+		this.updateBy = updateBy;
+	}
+
+	public String getCreateAt() {
+		return createAt;
+	}
+
+	public void setCreateAt(String createAt) {
+		this.createAt = createAt;
+	}
+
+	public Date getUpdateAt() {
+		return updateAt;
+	}
+
+	public void setUpdateAt(Date updateAt) {
+        this.updateAt = updateAt;
+    }
 
 }
