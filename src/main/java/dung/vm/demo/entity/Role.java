@@ -1,4 +1,4 @@
-package dung.vm.demo.model;
+package dung.vm.demo.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

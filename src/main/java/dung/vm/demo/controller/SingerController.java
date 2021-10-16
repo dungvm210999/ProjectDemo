@@ -1,10 +1,8 @@
 package dung.vm.demo.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,16 +15,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import dung.vm.demo.exception.ResourceNotFoundException;
-import dung.vm.demo.model.Singer;
-import dung.vm.demo.repository.SingerRepository;
+import dung.vm.demo.dto.SingerForm;
+import dung.vm.demo.entity.Singer;
+import dung.vm.demo.service.SingerService;
 
 @RestController
 @RequestMapping("/api/v1/singers")
 @CrossOrigin("*")
 public class SingerController  {
 
-	private SingerRepository singerRepository;
+	private SingerService singerService;
  
 //	Get all singers
 //	@GetMapping("/singers")
@@ -44,36 +42,35 @@ public class SingerController  {
 //	Create singer rest api
 	@PostMapping("/singers")
 	public Singer createSinger(@RequestBody Singer singer) {
-		return singerRepository.save(singer);
+//		return singerRepository.save(singer);
+		return singerService.createSinger(singer);
 	}
 
 //	Get singer by id rest api
 	@GetMapping("/singers/{id}")
-	public ResponseEntity<Singer> getSingerById(@PathVariable Long id) {
-		Singer singer = singerRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Singer not exist with id: " + id));
+	public ResponseEntity<Singer> getSingerById(@PathVariable Long singerId) {
+		Singer singer = singerService.findById(singerId);
+//		Singer singer = singerRepository.findById(id)
+//				.orElseThrow(() -> new ResourceNotFoundException("Singer not exist with id: " + id));
 		return ResponseEntity.ok(singer);
 	}
 
 //	Update singer rest api
-	@PutMapping("/singers/{id}")
-	public ResponseEntity<Singer> updateSinger(@PathVariable Long id, @RequestBody Singer singerDetails) {
-		Singer singer = singerRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Singer not exist with id: " + id));
-		singer.setName(singerDetails.getName());
-		singer.setAddress(singerDetails.getAddress());
-		singer.setEmail(singerDetails.getEmail());
-
-		Singer updatedSinger = singerRepository.save(singer);
-		return ResponseEntity.ok(updatedSinger);
+	@PutMapping("/singers")
+	public ResponseEntity<Singer> updateSinger(@RequestBody SingerForm singerForm) {
+//		Singer singer = singerRepository.findById(id)
+//				.orElseThrow(() -> new ResourceNotFoundException("Singer not exist with id: " + id));
+		Singer singer = singerService.updateSinger(singerForm);
+		return ResponseEntity.ok(singer);
 	}
 
 //	Delete singer rest api
 	@DeleteMapping("/singers/{id}")
-	public ResponseEntity<Map<String, Boolean>> deleteSinger(@PathVariable Long id) {
-		Singer singer = singerRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Singer not exist with id: " + id));
-		singerRepository.delete(singer);
+	public ResponseEntity<Map<String, Boolean>> deleteSinger(@PathVariable Long singerId) {
+//		Singer singer = singerRepository.findById(id)
+//				.orElseThrow(() -> new ResourceNotFoundException("Singer not exist with id: " + id));
+		singerService.deleteSinger(singerId);
+		
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return ResponseEntity.ok(response);
