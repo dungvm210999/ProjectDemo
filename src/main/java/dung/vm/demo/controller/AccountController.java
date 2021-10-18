@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import dung.vm.demo.dto.AccountForm;
 import dung.vm.demo.entity.Account;
-import dung.vm.demo.repository.AccountRepository;
 import dung.vm.demo.service.AccountService;
 //import dung.vm.demo.service.AccountService;
 import dung.vm.demo.service.RoleService;
@@ -17,7 +17,7 @@ import dung.vm.demo.service.RoleService;
 @Controller
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping("/api/v2/")
+@RequestMapping("/api/v1/")
 public class AccountController {
 	
 //	@Autowired
@@ -29,9 +29,9 @@ public class AccountController {
 	@Autowired
 	RoleService roleService;
 	
-	@PostMapping(value = { "/create-account" })
-	public Account saveAccount(@RequestBody Account account) {
-		return accountRepository.save(account);
-	}
+//	@PostMapping(value = { "/create-account" })
+//	public Account saveAccount(@RequestBody AccountForm accountForm) {
+//		return accountService.createAccount(accountForm);
+//	}
 
 }

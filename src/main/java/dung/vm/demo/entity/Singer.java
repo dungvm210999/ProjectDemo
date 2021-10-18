@@ -56,7 +56,7 @@ public class Singer {
 	private String createBy;
 
 	@Column(name = "create_at")
-	private String createAt;
+	private Date createAt;
 
 	@Column(name = "update_by")
 	private String updateBy;
@@ -208,11 +208,11 @@ public class Singer {
 		this.updateBy = updateBy;
 	}
 
-	public String getCreateAt() {
+	public Date getCreateAt() {
 		return createAt;
 	}
 
-	public void setCreateAt(String createAt) {
+	public void setCreateAt(Date createAt) {
 		this.createAt = createAt;
 	}
 
