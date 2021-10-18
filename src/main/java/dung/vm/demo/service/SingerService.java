@@ -1,36 +1,69 @@
 package dung.vm.demo.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import dung.vm.demo.common.Common;
+import dung.vm.demo.common.Constant;
+import dung.vm.demo.dto.FormSearchSinger;
 import dung.vm.demo.dto.SingerForm;
 import dung.vm.demo.entity.Singer;
+import dung.vm.demo.exception.BusinessException;
 import dung.vm.demo.exception.ResourceNotFoundException;
 import dung.vm.demo.repository.SingerRepository;
+import dung.vm.demo.specification.SingerSpecification;
 
 @Service
 public class SingerService {
-	
+
 	@Autowired
 	private SingerRepository singerRepository;
 
-	public Singer createSinger(Singer singer) {
+	public List<Singer> findAllSingers() {
+		System.out.println("Singer service 23");
+		return singerRepository.findAll();
+	}
+
+	@Transactional
+	public Singer createSinger(SingerForm singerForm) {
+		if (singerForm == null) {
+			throw new BusinessException(Constant.HTTPS_STATUS_CODE_500, "Dữ liệu truyền vào không đúng!");
+		}
+
+		Singer singer = new Singer();
+		singer.setName(singerForm.getName());
+		singer.setAddress(singerForm.getAddress());
+		singer.setPhoneNumber(singerForm.getPhoneNumber());
+		singer.setEmail(singerForm.getEmail());
+		singer.setFullName(singerForm.getFullName());
+		singer.setYearOfOperation(singerForm.getYearOfOperation());
+		singer.setDescription(singerForm.getDescription());
+		singer.setCreateAt(Common.getSystemDate());
+		singer.setUpdateAt(Common.getSystemDate());
+
 		return singerRepository.save(singer);
 	}
 
 	public Singer findById(Long singerId) {
 		Singer singer = singerRepository.findById(singerId)
-		.orElseThrow(() -> new ResourceNotFoundException("Singer not exist with id: " + singerId));
+				.orElseThrow(() -> new ResourceNotFoundException("Singer not exist with id: " + singerId));
 		return singer;
 	}
 
 	@Transactional
 	public Singer updateSinger(SingerForm singerForm) {
 		Singer singer = singerRepository.findBySingerId(singerForm.getSingerId());
-		
+
 		singer.setName(singerForm.getName());
 		singer.setAge(singerForm.getAge());
 		singer.setPhoneNumber(singerForm.getPhoneNumber());
@@ -40,38 +73,52 @@ public class SingerService {
 		singer.setYearOfOperation(singerForm.getYearOfOperation());
 		singer.setFullName(singerForm.getFullName());
 		singer.setBirthday(singerForm.getBirthday());
-		singer.setCreateBy(singerForm.getCreateBy());
-		singer.setCreateAt(singerForm.getCreateAt());
+		singer.setCreateAt(Common.getSystemDate());
 		singer.setUpdateAt(Common.getSystemDate());
-		singer.setUpdateBy(singerForm.getUpdateBy());
-		
+
 		return singerRepository.save(singer);
 	}
 
 	@Transactional
 	public void deleteSinger(Long singerId) {
 		Singer singer = singerRepository.findBySingerId(singerId);
-		
+
 		singer.setDelete(true);
 		singer.setUpdateAt(Common.getSystemDate());
-		
+
 		singerRepository.save(singer);
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	public Page<Singer> getAllSingers(int pageNumber, Integer recordPerPage) {
+		Pageable pageable = PageRequest.of(pageNumber, Constant.RECORD_PER_PAGE);
+		Page<Singer> singers = singerRepository.findAllSingers(Constant.STR_FALSE, pageable);
+		return singers;
+	}
+
+	public Page<Singer> searchSinger(@RequestParam FormSearchSinger formSearchSinger) {
+		if (formSearchSinger.getPageNumber() == null) {
+			formSearchSinger.setPageNumber(0);
+		}
+
+		Specification<Singer> conditions = Specification.where(SingerSpecification.isDelete(false));
+		if (formSearchSinger != null) {
+			if (StringUtils.isNotBlank(formSearchSinger.getName())) {
+				conditions = conditions.and(SingerSpecification.likeName(formSearchSinger.getName()));
+			}
+
+			if (StringUtils.isNotBlank(formSearchSinger.getAddress())) {
+				conditions = conditions.and(SingerSpecification.likeAddress(formSearchSinger.getAddress()));
+			}
+
+			if (StringUtils.isNotBlank(formSearchSinger.getEmail())) {
+				conditions = conditions.and(SingerSpecification.likeEmail(formSearchSinger.getEmail()));
+			}
+		}
+
+		Pageable pageable = PageRequest.of(formSearchSinger.getPageNumber(), Constant.RECORD_PER_PAGE);
+		Page<Singer> listChapter = singerRepository.findAll(conditions, pageable);
+		return listChapter;
+
+	}
+
 }

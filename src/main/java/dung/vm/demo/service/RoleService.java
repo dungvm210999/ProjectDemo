@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import dung.vm.demo.model.Role;
+import dung.vm.demo.entity.Role;
 import dung.vm.demo.repository.RoleRepository;
 
 @Service
