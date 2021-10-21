@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import dung.vm.demo.common.Constant;
 import dung.vm.demo.dto.FormSearchSinger;
 import dung.vm.demo.dto.SingerForm;
 import dung.vm.demo.entity.Singer;
@@ -35,19 +33,10 @@ public class SingerController {
 	@Autowired
 	private SingerService singerService;
 	
-	@Autowired
-	private Environment environment;
-	
-	public void readValues() {
-	    System.out.println("Some Message:"
-	            + environment.getProperty("<Property Name>")); 
-
-	}
-	
 //	Search singers
-	@GetMapping("/singers/search-singers/{formSearchSinger}")
+	@PostMapping("/search-singers")
 	@ResponseBody
-	public Page<Singer> searchSinger(@RequestParam FormSearchSinger formSearchSinger) {
+	public Page<Singer> searchSinger(@RequestBody FormSearchSinger formSearchSinger) {
 		return singerService.searchSinger(formSearchSinger);
 	}
 
@@ -59,8 +48,13 @@ public class SingerController {
 
 //	Create singer rest api
 	@PostMapping("/create-singer")
-	public Singer createSinger(@RequestBody SingerForm singerForm) {
-		return singerService.createSinger(singerForm);
+	public ResponseEntity<Map<String, Boolean>> createSinger(@RequestBody SingerForm singerForm) {
+		singerService.createSinger(singerForm);
+		
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("Created", Boolean.TRUE);
+		
+		return ResponseEntity.ok(response);
 	}
 
 //	Get singer by id rest api
@@ -71,14 +65,15 @@ public class SingerController {
 	}
 
 //	Update singer rest api
-	@PutMapping("/singers")
+	@PutMapping("/update-singer")
 	public ResponseEntity<Singer> updateSinger(@RequestBody SingerForm singerForm) {
 		Singer singer = singerService.updateSinger(singerForm);
+		
 		return ResponseEntity.ok(singer);
 	}
 
 //	Delete singer rest api
-	@DeleteMapping("/singers/{singerId}")
+	@DeleteMapping("/delete-singer/{singerId}")
 	public ResponseEntity<Map<String, Boolean>> deleteSinger(@PathVariable Long singerId) {
 		singerService.deleteSinger(singerId);
 
@@ -89,8 +84,8 @@ public class SingerController {
 	
 //	Pagination
 	@GetMapping("/singers/page{pageNumber, pageSize}")
-	public ResponseEntity<Page<Singer>> getAllSingers(@RequestParam int pageNumber) {
-		Page<Singer> singers = singerService.getAllSingers(pageNumber, Constant.RECORD_PER_PAGE);
+	public ResponseEntity<Page<Singer>> getAllSingers(@RequestParam int pageNumber, @RequestParam int pageSize) {
+		Page<Singer> singers = singerService.getAllSingers(pageNumber, pageSize);
 		return new ResponseEntity<Page<Singer>>(singers, HttpStatus.OK);
 	}
 	

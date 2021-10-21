@@ -1,5 +1,7 @@
 package dung.vm.demo.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,5 +21,8 @@ public interface SingerRepository extends JpaRepository<Singer, Long>, PagingAnd
 
 	@Query("SELECT s FROM Singer s WHERE s.isDelete = false")
 	public Page<Singer> findAllSingers(String strFalse, Pageable pageable);
+	
+	@Query("SELECT s FROM Singer s WHERE s.isDelete = false")
+	public List<Singer> findAllSingersIsNotDelete();
 
 }
