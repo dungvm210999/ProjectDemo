@@ -31,7 +31,7 @@ public class SingerService {
 
 	public List<Singer> findAllSingers() {
 		System.out.println("Singer service 23");
-		return singerRepository.findAll();
+		return singerRepository.findAllSingersIsNotDelete();
 	}
 
 	@Transactional
@@ -89,8 +89,8 @@ public class SingerService {
 		singerRepository.save(singer);
 	}
 
-	public Page<Singer> getAllSingers(int pageNumber, Integer recordPerPage) {
-		Pageable pageable = PageRequest.of(pageNumber, Constant.RECORD_PER_PAGE);
+	public Page<Singer> getAllSingers(int pageNumber, int pageSize) {
+		Pageable pageable = PageRequest.of(pageNumber, pageSize);
 		Page<Singer> singers = singerRepository.findAllSingers(Constant.STR_FALSE, pageable);
 		return singers;
 	}
