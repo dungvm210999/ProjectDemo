@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import dung.vm.demo.common.Common;
 import dung.vm.demo.common.Constant;
@@ -19,8 +18,8 @@ import dung.vm.demo.dto.FormSearchSinger;
 import dung.vm.demo.dto.SingerForm;
 import dung.vm.demo.entity.Singer;
 import dung.vm.demo.exception.BusinessException;
-import dung.vm.demo.exception.ResourceNotFoundException;
 import dung.vm.demo.repository.SingerRepository;
+import dung.vm.demo.repository.SongRepository;
 import dung.vm.demo.specification.SingerSpecification;
 
 @Service
@@ -28,6 +27,9 @@ public class SingerService {
 
 	@Autowired
 	private SingerRepository singerRepository;
+
+	@Autowired
+	private SongRepository songRepository;
 
 	public List<Singer> findAllSingers() {
 		System.out.println("Singer service 23");
@@ -55,8 +57,7 @@ public class SingerService {
 	}
 
 	public Singer findById(Long singerId) {
-		Singer singer = singerRepository.findById(singerId)
-				.orElseThrow(() -> new ResourceNotFoundException("Singer not exist with id: " + singerId));
+		Singer singer = singerRepository.findBySingerId(singerId);
 		return singer;
 	}
 
@@ -95,7 +96,7 @@ public class SingerService {
 		return singers;
 	}
 
-	public Page<Singer> searchSinger(@RequestParam FormSearchSinger formSearchSinger) {
+	public Page<Singer> searchSinger(FormSearchSinger formSearchSinger, int pageNumber, int pageSize) {
 		if (formSearchSinger.getPageNumber() == null) {
 			formSearchSinger.setPageNumber(0);
 		}
@@ -115,7 +116,7 @@ public class SingerService {
 			}
 		}
 
-		Pageable pageable = PageRequest.of(formSearchSinger.getPageNumber(), Constant.RECORD_PER_PAGE);
+		Pageable pageable = PageRequest.of(formSearchSinger.getPageNumber(), pageSize);
 		Page<Singer> listChapter = singerRepository.findAll(conditions, pageable);
 		return listChapter;
 
