@@ -22,8 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dung.vm.demo.dto.FormSearchSinger;
 import dung.vm.demo.dto.SingerForm;
+import dung.vm.demo.dto.SongForm;
 import dung.vm.demo.entity.Singer;
+import dung.vm.demo.entity.Song;
 import dung.vm.demo.service.SingerService;
+import dung.vm.demo.service.SongService;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -33,11 +36,18 @@ public class SingerController {
 	@Autowired
 	private SingerService singerService;
 	
+	@Autowired
+	private SongService songService;
+	
 //	Search singers
-	@PostMapping("/search-singers")
+	@PostMapping("/search-singers/page{pageNumber, pageSize}")
 	@ResponseBody
-	public Page<Singer> searchSinger(@RequestBody FormSearchSinger formSearchSinger) {
-		return singerService.searchSinger(formSearchSinger);
+	public ResponseEntity<Page<Singer>> searchSinger(@RequestBody FormSearchSinger formSearchSinger, @RequestParam int pageNumber, @RequestParam int pageSize) {
+//		singerService.searchSinger(formSearchSinger);
+		
+//		Page<Singer> singerPage = singerService.getAllSingers(pageNumber, pageSize);
+		Page<Singer> singerSearchPage = singerService.searchSinger(formSearchSinger, pageNumber, pageSize);
+		return new ResponseEntity<Page<Singer>>(singerSearchPage, HttpStatus.OK);
 	}
 
 //	Get all singers
@@ -61,6 +71,9 @@ public class SingerController {
 	@GetMapping("/singers/{singerId}")
 	public ResponseEntity<Singer> getSingerById(@PathVariable Long singerId) {
 		Singer singer = singerService.findById(singerId);
+		
+//		Map<String, Boolean> response = new HashMap<>();
+//		response.put("result", Boolean.TRUE);
 		return ResponseEntity.ok(singer);
 	}
 
@@ -89,5 +102,43 @@ public class SingerController {
 		return new ResponseEntity<Page<Singer>>(singers, HttpStatus.OK);
 	}
 	
+//	Song controller
+	
+//	Create song rest api
+	@PostMapping("/singers/{singerId}/create-song")
+	public ResponseEntity<Map<String, Boolean>> createSong(@RequestBody SongForm songForm, @PathVariable Long singerId) {
+		songService.createSong(songForm);
+		
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("Created", Boolean.TRUE);
+		
+		return ResponseEntity.ok(response);
+	}
+	
+//	Get song by id rest api
+	@GetMapping("/songs/{songId}")
+	public ResponseEntity<Song> getSongById(@PathVariable Long songId) {
+		Song song = songService.findById(songId);
+		
+		return ResponseEntity.ok(song);
+	}
+	
+//	Update song rest api
+	@PutMapping("/update-song")
+	public ResponseEntity<Song> updateSong(@RequestBody SongForm songForm) {
+		Song song = songService.updateSong(songForm);
+		
+		return ResponseEntity.ok(song);
+	}
+	
+//	Delete song rest api
+	@DeleteMapping("/delete-song/{songId}")
+	public ResponseEntity<Map<String, Boolean>> deleteSong(@PathVariable Long songId) {
+		songService.deleteSong(songId);
+
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("Deleted", Boolean.TRUE);
+		return ResponseEntity.ok(response);
+	}
 	
 }
