@@ -1,26 +1,35 @@
 package dung.vm.demo.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import dung.vm.demo.common.ERole;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "role")
-public class Role {
+public class Role implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "role_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long roleId;
 
-	@Column(name = "role_name")
-	private String roleName;
-
-	@Column(name = "content")
-	private String content;
+	@Enumerated(EnumType.STRING)
+	@Column(length = 20)
+	private ERole roleName;
 
 	public Long getRoleId() {
 		return roleId;
@@ -30,20 +39,12 @@ public class Role {
 		this.roleId = roleId;
 	}
 
-	public String getRoleName() {
+	public ERole getRoleName() {
 		return roleName;
 	}
 
-	public void setRoleName(String roleName) {
+	public void setRoleName(ERole roleName) {
 		this.roleName = roleName;
-	}
-
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
 	}
 
 }

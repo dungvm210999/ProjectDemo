@@ -17,9 +17,9 @@ import dung.vm.demo.common.Constant;
 import dung.vm.demo.dto.FormSearchSinger;
 import dung.vm.demo.dto.SingerForm;
 import dung.vm.demo.entity.Singer;
+import dung.vm.demo.entity.Song;
 import dung.vm.demo.exception.BusinessException;
 import dung.vm.demo.repository.SingerRepository;
-import dung.vm.demo.repository.SongRepository;
 import dung.vm.demo.specification.SingerSpecification;
 
 @Service
@@ -27,9 +27,6 @@ public class SingerService {
 
 	@Autowired
 	private SingerRepository singerRepository;
-
-	@Autowired
-	private SongRepository songRepository;
 
 	public List<Singer> findAllSingers() {
 		System.out.println("Singer service 23");
@@ -120,6 +117,20 @@ public class SingerService {
 		Page<Singer> listChapter = singerRepository.findAll(conditions, pageable);
 		return listChapter;
 
+	}
+
+	@Transactional
+	public void addSongToSinger(Song song, Long singerId) {
+		System.out.println("abc");
+		Singer singer = singerRepository.findBySingerId(singerId);
+		
+		singer.getListSong().add(song);
+		song.setSinger(singer);
+		singerRepository.save(singer);
+	}
+
+	public Singer findBySingerId(Long singerId) {
+		return singerRepository.findBySingerId(singerId);
 	}
 
 }

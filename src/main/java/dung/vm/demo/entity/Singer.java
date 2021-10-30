@@ -1,5 +1,6 @@
 package dung.vm.demo.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -137,7 +138,13 @@ public class Singer {
 	}
 
 	public List<Song> getListSong() {
-		return listSong;
+		List<Song> listSongCoppy = new ArrayList<>();
+		for(Song song : listSong) {
+			if(song.isDelete() == false) {
+				listSongCoppy.add(song);
+			}
+		}
+		return listSongCoppy;
 	}
 
 	public void setListSong(List<Song> listSong) {

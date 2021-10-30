@@ -22,6 +22,14 @@ public class Song {
 	@Column(name = "song_id")
 	private Long songId;
 
+	public Long getSingerId() {
+		return singerId;
+	}
+
+	public void setSingerId(Long singerId) {
+		this.singerId = singerId;
+	}
+
 	@Column(name = "name")
 	private String name;
 
@@ -42,12 +50,18 @@ public class Song {
 
 	@Column(name = "update_at")
 	private Date updateAt;
-	
+
 	@Column(name = "price")
 	private Double price;
-	
+
 	@Column(name = "is_delete", columnDefinition = "Boolean default false")
-    private boolean isDelete;
+	private boolean isDelete;
+
+//	@Column(name = "song_time")
+//	private float songTime;
+
+	@Column(name = "singer_id", nullable = false, unique = true, updatable = false, insertable = false)
+	private Long singerId;
 
 	@JsonBackReference
 	@ManyToOne
@@ -141,9 +155,13 @@ public class Song {
 	public void setDelete(boolean isDelete) {
 		this.isDelete = isDelete;
 	}
-	
-	
-	
-	
+
+//	public float getSongTime() {
+//		return songTime;
+//	}
+//
+//	public void setSongTime(float songTime) {
+//		this.songTime = songTime;
+//	}
 
 }

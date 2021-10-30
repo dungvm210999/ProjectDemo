@@ -1,5 +1,7 @@
 package dung.vm.demo.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +13,6 @@ import dung.vm.demo.dto.SongForm;
 import dung.vm.demo.entity.Singer;
 import dung.vm.demo.entity.Song;
 import dung.vm.demo.exception.BusinessException;
-import dung.vm.demo.exception.ResourceNotFoundException;
 import dung.vm.demo.repository.SingerRepository;
 import dung.vm.demo.repository.SongRepository;
 
@@ -25,12 +26,14 @@ public class SongService {
 	SingerRepository singerRepository;
 
 	@Transactional
-	public Song createSong(SongForm songForm) {
+	public Song createSong(SongForm songForm, Long singerId) {
 		if (songForm == null) {
 			throw new BusinessException(Constant.HTTPS_STATUS_CODE_500, "Du lieu truyen vao khong dung!");
 		}
 		
-		Singer singer = singerRepository.findBySingerId(songForm.getSingerId());
+		Singer singer = singerRepository.findBySingerId(singerId);
+		
+		System.out.println(songForm.getSingerId());
 		
 		if (singer == null) {
 			throw new BusinessException(Constant.HTTPS_STATUS_CODE_500, "Ca sĩ không tồn tại!");
@@ -45,11 +48,18 @@ public class SongService {
 
 		return songRepository.save(song);
 	}
+	
+	public List<Song> findAllSongsIsNotDelete() {
+		System.out.println("Song service findAllSongs");
+		return songRepository.findAllSongsIsNotDelete();
+	}
 
 	public Song findById(Long songId) {
-		Song song = songRepository.findById(songId)
-				.orElseThrow(() -> new ResourceNotFoundException("Song not exist with id: " + songId));
-		return song;
+		return songRepository.findBySongId(songId);
+	}
+	
+	public List<Song> findAllSongsOfSinger(Long singerId) {
+		return songRepository.findAllSongsOfSingerIdIsNotDelete(singerId);
 	}
 
 	@Transactional
@@ -73,6 +83,11 @@ public class SongService {
 		
 		songRepository.save(song);
 	}
+
+//	public Song findBySongIdOfSingerId(Long songId, Long singerId) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 	
 	
 }
