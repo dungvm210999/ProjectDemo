@@ -16,12 +16,12 @@ import dung.vm.demo.entity.Singer;
 public interface SingerRepository extends JpaRepository<Singer, Long>, PagingAndSortingRepository<Singer, Long>,
 		JpaSpecificationExecutor<Singer> {
 
-	@Query("SELECT s FROM Singer s WHERE s.isDelete = false AND s.singerId = :singerId")
+	@Query(nativeQuery = true, value = "SELECT * FROM Singer s WHERE s.is_delete = false AND s.singer_id = ?")
 	public Singer findBySingerId(Long singerId);
 
 	@Query("SELECT s FROM Singer s WHERE s.isDelete = false")
 	public Page<Singer> findAllSingers(String strFalse, Pageable pageable);
-	
+
 	@Query("SELECT s FROM Singer s WHERE s.isDelete = false")
 	public List<Singer> findAllSingersIsNotDelete();
 

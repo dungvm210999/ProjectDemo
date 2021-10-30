@@ -40,7 +40,7 @@ public class SingerController {
 	private SongService songService;
 	
 //	Search singers
-	@PostMapping("/search-singers/page{pageNumber, pageSize}")
+	@PostMapping("/search-singers/page{formSearchSinger, pageNumber, pageSize}")
 	@ResponseBody
 	public ResponseEntity<Page<Singer>> searchSinger(@RequestBody FormSearchSinger formSearchSinger, @RequestParam int pageNumber, @RequestParam int pageSize) {
 //		singerService.searchSinger(formSearchSinger);
@@ -51,13 +51,13 @@ public class SingerController {
 	}
 
 //	Get all singers
-	@GetMapping("/singers")
+	@GetMapping("/admin/singers")
 	public List<Singer> getAllSinger() {
 		return singerService.findAllSingers();
 	}
 
 //	Create singer rest api
-	@PostMapping("/create-singer")
+	@PostMapping("/admin/create-singer")
 	public ResponseEntity<Map<String, Boolean>> createSinger(@RequestBody SingerForm singerForm) {
 		singerService.createSinger(singerForm);
 		
@@ -68,7 +68,7 @@ public class SingerController {
 	}
 
 //	Get singer by id rest api
-	@GetMapping("/singers/{singerId}")
+	@GetMapping("/admin/singers/{singerId}")
 	public ResponseEntity<Singer> getSingerById(@PathVariable Long singerId) {
 		Singer singer = singerService.findById(singerId);
 		
@@ -78,7 +78,7 @@ public class SingerController {
 	}
 
 //	Update singer rest api
-	@PutMapping("/update-singer")
+	@PutMapping("/admin/update-singer")
 	public ResponseEntity<Singer> updateSinger(@RequestBody SingerForm singerForm) {
 		Singer singer = singerService.updateSinger(singerForm);
 		
@@ -86,7 +86,7 @@ public class SingerController {
 	}
 
 //	Delete singer rest api
-	@DeleteMapping("/delete-singer/{singerId}")
+	@DeleteMapping("/admin/delete-singer/{singerId}")
 	public ResponseEntity<Map<String, Boolean>> deleteSinger(@PathVariable Long singerId) {
 		singerService.deleteSinger(singerId);
 
@@ -96,7 +96,7 @@ public class SingerController {
 	}
 	
 //	Pagination
-	@GetMapping("/singers/page{pageNumber, pageSize}")
+	@GetMapping("/admin/singers/page{pageNumber, pageSize}")
 	public ResponseEntity<Page<Singer>> getAllSingers(@RequestParam int pageNumber, @RequestParam int pageSize) {
 		Page<Singer> singers = singerService.getAllSingers(pageNumber, pageSize);
 		return new ResponseEntity<Page<Singer>>(singers, HttpStatus.OK);
@@ -104,10 +104,24 @@ public class SingerController {
 	
 //	Song controller
 	
+//	Get all songs of sing isDelete = false
+	@GetMapping("/admin/singers/{singerId}/songs")
+	public List<Song> getAllSongsOfSinger(@PathVariable Long singerId) {
+		return songService.findAllSongsOfSinger(singerId);
+	}
+	
+//	Get all songs
+	@GetMapping("/admin/songs")
+	public List<Song> getAllSongs() {
+		return songService.findAllSongsIsNotDelete();
+	}
+	
 //	Create song rest api
-	@PostMapping("/singers/{singerId}/create-song")
+	@PostMapping("/admin/singers/{singerId}/create-song")
 	public ResponseEntity<Map<String, Boolean>> createSong(@RequestBody SongForm songForm, @PathVariable Long singerId) {
-		songService.createSong(songForm);
+		Song song = songService.createSong(songForm, singerId);
+		
+		singerService.addSongToSinger(song, singerId);
 		
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("Created", Boolean.TRUE);
@@ -116,15 +130,16 @@ public class SingerController {
 	}
 	
 //	Get song by id rest api
-	@GetMapping("/songs/{songId}")
+	@GetMapping("/admin/songs/{songId}")
+//	@GetMapping("singers/{singerId}/songs/{songId}")
 	public ResponseEntity<Song> getSongById(@PathVariable Long songId) {
 		Song song = songService.findById(songId);
 		
 		return ResponseEntity.ok(song);
-	}
+	}	
 	
 //	Update song rest api
-	@PutMapping("/update-song")
+	@PutMapping("/admin/update-song")
 	public ResponseEntity<Song> updateSong(@RequestBody SongForm songForm) {
 		Song song = songService.updateSong(songForm);
 		
@@ -132,7 +147,7 @@ public class SingerController {
 	}
 	
 //	Delete song rest api
-	@DeleteMapping("/delete-song/{songId}")
+	@DeleteMapping("/admin/delete-song/{songId}")
 	public ResponseEntity<Map<String, Boolean>> deleteSong(@PathVariable Long songId) {
 		songService.deleteSong(songId);
 
