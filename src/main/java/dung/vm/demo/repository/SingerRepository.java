@@ -16,7 +16,7 @@ import dung.vm.demo.entity.Singer;
 public interface SingerRepository extends JpaRepository<Singer, Long>, PagingAndSortingRepository<Singer, Long>,
 		JpaSpecificationExecutor<Singer> {
 
-	@Query(nativeQuery = true, value = "SELECT * FROM Singer s WHERE s.is_delete = false AND s.singer_id = ?")
+	@Query("SELECT s FROM Singer s WHERE s.isDelete = false AND s.singerId = :singerId")
 	public Singer findBySingerId(Long singerId);
 
 	@Query("SELECT s FROM Singer s WHERE s.isDelete = false")

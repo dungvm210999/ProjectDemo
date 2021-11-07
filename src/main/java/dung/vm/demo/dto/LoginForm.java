@@ -1,7 +1,5 @@
 package dung.vm.demo.dto;
 
-import javax.validation.constraints.NotNull;
-
 public class LoginForm {
 	
 	//@NotNull

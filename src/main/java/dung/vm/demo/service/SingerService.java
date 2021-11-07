@@ -40,13 +40,14 @@ public class SingerService {
 		}
 
 		Singer singer = new Singer();
+		
+//		singer.setSingerId(2);
 		singer.setName(singerForm.getName());
 		singer.setAddress(singerForm.getAddress());
 		singer.setPhoneNumber(singerForm.getPhoneNumber());
 		singer.setEmail(singerForm.getEmail());
 		singer.setFullName(singerForm.getFullName());
 		singer.setYearOfOperation(singerForm.getYearOfOperation());
-		singer.setDescription(singerForm.getDescription());
 		singer.setCreateAt(Common.getSystemDate());
 		singer.setUpdateAt(Common.getSystemDate());
 
@@ -63,7 +64,6 @@ public class SingerService {
 		Singer singer = singerRepository.findBySingerId(singerForm.getSingerId());
 
 		singer.setName(singerForm.getName());
-		singer.setAge(singerForm.getAge());
 		singer.setPhoneNumber(singerForm.getPhoneNumber());
 		singer.setAddress(singerForm.getAddress());
 		singer.setEmail(singerForm.getEmail());
@@ -121,11 +121,11 @@ public class SingerService {
 
 	@Transactional
 	public void addSongToSinger(Song song, Long singerId) {
-		System.out.println("abc");
 		Singer singer = singerRepository.findBySingerId(singerId);
 		
 		singer.getListSong().add(song);
 		song.setSinger(singer);
+		
 		singerRepository.save(singer);
 	}
 
