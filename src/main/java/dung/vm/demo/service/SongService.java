@@ -31,13 +31,11 @@ public class SongService {
 			throw new BusinessException(Constant.HTTPS_STATUS_CODE_500, "Du lieu truyen vao khong dung!");
 		}
 		
-		Singer singer = singerRepository.findBySingerId(singerId);
+		singerRepository.findBySingerId(singerId);
 		
-		System.out.println(songForm.getSingerId());
-		
-		if (singer == null) {
-			throw new BusinessException(Constant.HTTPS_STATUS_CODE_500, "Ca sĩ không tồn tại!");
-		}
+//		if (singer == null) {
+//			throw new BusinessException(Constant.HTTPS_STATUS_CODE_500, "Ca sĩ không tồn tại!");
+//		}
 		
 		Song song = new Song();
 		
@@ -83,11 +81,5 @@ public class SongService {
 		
 		songRepository.save(song);
 	}
-
-//	public Song findBySongIdOfSingerId(Long songId, Long singerId) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-	
 	
 }

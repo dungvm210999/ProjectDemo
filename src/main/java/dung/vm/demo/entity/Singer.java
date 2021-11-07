@@ -26,9 +26,6 @@ public class Singer {
 	@Column(name = "name")
 	private String name;
 
-	@Column(name = "age")
-	private int age;
-
 	@Column(name = "phone_number")
 	private String phoneNumber;
 
@@ -76,12 +73,11 @@ public class Singer {
 		super();
 	}
 
-	public Singer(long singerId, String name, int age, String phoneNumber, String address, String email,
+	public Singer(long singerId, String name, String phoneNumber, String address, String email,
 			List<Song> listSong, String image) {
 		super();
 		this.singerId = singerId;
 		this.name = name;
-		this.age = age;
 		this.phoneNumber = phoneNumber;
 		this.address = address;
 		this.email = email;
@@ -103,14 +99,6 @@ public class Singer {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public int getAge() {
-		return age;
-	}
-
-	public void setAge(int age) {
-		this.age = age;
 	}
 
 	public String getPhoneNumber() {
